@@ -1,6 +1,11 @@
-# 📧 Website Email Extractor (GUI + Excel Export)
+# 📧 Website Email Extractor (GUI + Excel Export + Timeout & Status)
 
-This is a Python desktop GUI application that extracts email addresses from a list of websites provided in a `.txt` file. It checks the homepage and also searches for emails on "contact" or "career" pages if needed.
+This is a Python desktop GUI application that extracts email addresses from a list of websites provided in a `.txt` file. It checks the homepage and also searches for emails on "contact" or "career" pages if needed. Each website is processed with a timeout to avoid freezing on slow or unresponsive sites.
+
+Now supports detailed status output:
+- ✅ Found emails
+- 🚫 No emails found
+- ⏱️ Timed out
 
 ---
 
@@ -9,11 +14,15 @@ This is a Python desktop GUI application that extracts email addresses from a li
 - GUI interface using `tkinter`
 - Upload list of websites from a `.txt` file
 - Automatically follows redirects
-- Extracts emails using pattern matching
+- Extracts emails using regex
 - Fallback to "contact" or "career" subpages if homepage has no email
+- Timeout: skips any website taking more than 15 seconds
 - Displays results live in GUI
 - Saves results to Excel (`.xlsx`) in column format
-- Includes websites with no emails found
+- Distinguishes between:
+  - Found emails
+  - No emails found
+  - Timed out websites
 
 ---
 
@@ -29,7 +38,7 @@ pip install requests beautifulsoup4 openpyxl
 
 ## 📁 Input Format (websites.txt)
 
-Example contents of `websites.txt`:
+Example:
 
 ```
 https://example.com
@@ -37,43 +46,44 @@ royalwrist.pk
 https://anotherdomain.org
 ```
 
-Each website should be on a new line. You can include or omit `http://` or `https://`.
+Each line should be a full or partial website address. The script auto-adds `http://` if missing.
 
 ---
 
 ## 🚀 How to Use
 
-1. Run the Python script:
+1. Run the script:
 
 ```bash
-python email_extractor_gui.py
+python Email_Fcher.py
 ```
 
 2. In the GUI:
    - Click **"Upload Website List"** to choose your `.txt` file.
-   - The app will fetch emails and display results live.
-   - After processing, click **"Save Results to Excel"** to export.
+   - The app will process and display emails or status.
+   - When done, click **"Save Results to Excel"** to export.
 
 ---
 
 ## 🧾 Output Format (Excel)
 
-| Website              | Emails                                      |
-|----------------------|----------------------------------------------|
-| https://example.com  | info@example.com                             |
-| royalwrist.pk        | hr@royalwrist.pk, support@royalwrist.pk      |
-| https://abc.com      | No emails found                              |
+| Website              | Emails / Status                         |
+|----------------------|------------------------------------------|
+| https://example.com  | contact@example.com                     |
+| royalwrist.pk        | hr@royalwrist.pk, info@royalwrist.pk   |
+| https://slow-site.com| Timed out                               |
+| https://empty.com    | No emails found                         |
 
 ---
 
 ## ❗ Notes
 
-- Email detection is regex-based and works for standard formats.
-- Sites using JavaScript to load email data are not supported in this version.
-- Every website is included in the output, even if no email is found.
+- Sites using JavaScript to load email content are **not supported** in this version.
+- Every website is included in the output with clear status.
+- Timeout is currently set to **15 seconds** per website.
 
 ---
 
 ## 📍 Author
 
-Made with ❤️ using Python for automated email scraping tasks.
+Made with ❤️ in Python for scraping and organizing emails from websites efficiently.
